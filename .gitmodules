@@ -1,0 +1,3 @@
+[submodule "lazy-log-filter"]
+	path = utils/log_filter
+	url = git@github.com:jvazquez/lazy-log-filter.git

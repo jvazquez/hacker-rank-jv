@@ -1,0 +1,112 @@
+{
+	"version": 1,
+	"disable_existing_loggers": false,
+	"formatters": {
+		"simple": {
+			"format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+		},
+		"detailed": {
+			"format": "[%(filename)s:%(lineno)s - %(funcName)5s()] %(asctime)s - %(name)s - %(levelname)s - %(message)s"
+		},
+		"plain":{
+			"format": "%(message)s"
+		}
+	},
+	"filters": {
+		"debug_only": {
+			"()": "utils.log_filter.log.filters.level.SingleLevelFilter",
+			"passlevel": 10,
+			"reject": false
+		},
+		"testing_only": {
+			"()": "utils.log_filter.log.filters.patterns.string.StringLevelFilter",
+			"pattern_accepted": "test",
+			"passlevel": 10,
+			"reject": false
+		},
+		"info_only": {
+			"()": "utils.log_filter.log.filters.level.SingleLevelFilter",
+			"passlevel": 20,
+			"reject": false
+		},
+		"warning_only": {
+			"()": "utils.log_filter.log.filters.level.SingleLevelFilter",
+			"passlevel": 30,
+			"reject": false
+		},
+		"error_only": {
+			"()": "utils.log_filter.log.filters.level.SingleLevelFilter",
+			"passlevel": 40,
+			"reject": false
+		},
+		"critical_only": {
+			"()": "utils.log_filter.log.filters.level.SingleLevelFilter",
+			"passlevel": 50,
+			"reject": false
+		}
+	},
+	"handlers": {
+		"console": {
+			"class": "logging.StreamHandler",
+			"level": "DEBUG",
+			"formatter": "detailed",
+			"stream": "ext://sys.stdout",
+			"filters": ["debug_only"]
+		},
+		"testing_file_handler": {
+			"class": "logging.handlers.RotatingFileHandler",
+			"level": "DEBUG",
+			"formatter": "simple",
+			"filename": "user-testing-debug.log",
+			"filters": ["testing_only"],
+			"maxBytes": 10000000,
+			"backupCount": 5,
+			"encoding": "utf8"
+		},
+		"debug_file_handler": {
+			"class": "logging.handlers.RotatingFileHandler",
+			"level": "DEBUG",
+			"formatter": "simple",
+			"filename": "user-debug.log",
+			"filters": ["debug_only"],
+			"maxBytes": 10000000,
+			"backupCount": 5,
+			"encoding": "utf8"
+		},
+		"info_file_handler": {
+			"class": "logging.handlers.RotatingFileHandler",
+			"level": "INFO",
+			"formatter": "simple",
+			"filename": "user-info.log",
+			"maxBytes": 10000000,
+			"backupCount": 5,
+			"encoding": "utf8",
+			"filters": ["info_only"]
+		},
+		"error_file_handler": {
+			"class": "logging.handlers.RotatingFileHandler",
+			"level": "ERROR",
+			"formatter": "simple",
+			"filename": "user-error.log",
+			"maxBytes": 10000000,
+			"backupCount": 5,
+			"encoding": "utf8",
+			"filters": ["error_only"]
+		}
+	},
+	"loggers": {
+		"run": {
+			"level": "DEBUG"
+		}
+	},
+	"root": {
+		"level": "DEBUG",
+		"handlers": [
+			"info_file_handler",
+			"error_file_handler",
+			"debug_file_handler",
+			"testing_file_handler",
+			"console"
+		]
+	}
+}
