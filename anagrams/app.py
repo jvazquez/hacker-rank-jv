@@ -1,26 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-:mod:`module-name-here` -- Description here 
+:mod:`app` -- Anagram solver
 ===================================
 
-.. module:: module-name-here
+.. module:: app
    :platform: Unix, Windows
-   :synopsis: complete.
+   :synopsis: Determines the amount of letters needed to be
+removed from two strings so they becom anagrams
 .. moduleauthor:: Jorge Omar Vazquez <jorgeomar.vazquez@gmail.com>
 ..:date: Dec 28, 2017
 """
+import logging
 
-def proper_len(word):
-    """Validate the constraints of string length
+logger = logging.getLogger("debug")
 
-    Parameters:
-        word `string`
 
-    Returns
-        `boolean` if string is according to range
-
-    """
-    return len(word)>= 1 and len(word) <= pow(10, 4)
+def letter_filter(pivot):
+    while True:
+        outside_letter = yield
+        if outside_letter not in pivot:
+            yield outside_letter
 
 
 def number_needed(word_a, word_b):
@@ -34,6 +33,32 @@ def number_needed(word_a, word_b):
         `int`
 
     """
-    diff_a = set(list(word_a)) - set(list(word_b))
-    diff_b = set(list(word_b)) - set(list(word_a))
-    return len(diff_b) + len(diff_a)
+
+    word_a_len = len(word_a)
+    word_b_len = len(word_b)
+    bucket = []
+
+    if word_a_len > word_b_len:
+        scanner = letter_filter(word_a)
+        next(scanner)
+        for letter in word_b:
+            popped = scanner.send(letter)
+            if popped is not None:
+                bucket.append(popped)
+
+        new_a = [letter for letter in word_a if letter not in bucket]
+        return len(new_a)
+    elif word_b_len > word_a_len:
+        scanner = letter_filter(word_b)
+        next(scanner)
+        for letter in word_a:
+            popped = scanner.send(letter)
+            if popped is not None:
+                bucket.append(popped)
+
+        new_b = [letter for letter in word_b if letter not in bucket]
+        return len(new_b)
+    elif word_b_len == word_a_len:
+        bucket_a = [letter for letter in word_a if letter not in word_b]
+        bucket_b = [letter for letter in word_b if letter not in word_a]
+        return len(bucket_a + bucket_b)

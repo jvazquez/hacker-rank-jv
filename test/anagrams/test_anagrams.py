@@ -12,30 +12,16 @@
 
 import unittest
 
-from collections import deque
-
-from anagrams.app import number_needed, proper_len
+from anagrams.app import number_needed
 
 
 class TestAnagram(unittest.TestCase):
 
-
-    def test_empty_string_does_not_have_proper_len(self):
-        self.assertFalse(proper_len(''))
-
-    def test_none_does_not_have_proper_len(self):
-        self.assertFalse(None)
-
-    def test_long_string_does_not_have_proper_len(self):
-        sample = deque(map(lambda x: x*pow(10, 5), "x"))
-        self.assertFalse(proper_len(sample[0]))
-
-    def test_number_needed_obtains_required_number(self):
+    def test_number_needed_sample(self):
         word_a = 'cde'
         word_b = 'abc'
         expected = 4
         number = number_needed(word_a, word_b)
-        self.assertTrue(type(number) == type(1))
         self.assertEqual(expected, number)
 
     def test_number_needed_case_one(self):
