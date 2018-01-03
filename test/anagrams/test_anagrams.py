@@ -30,3 +30,10 @@ class TestAnagram(unittest.TestCase):
         expected = 30
         number = number_needed(word_a, word_b)
         self.assertEqual(expected, number)
+
+    def test_number_needed_case_two(self):
+        word_a = 'bugexikjevtubidpulaelsbcqlupwetzyzdvjphn'
+        word_b = 'lajoipfecfinxjspxmevqxuqyalhrsxcvgsdxxkacspbchrbvvwnvsdtsrdk'
+        expected = 40
+        number = number_needed(word_a, word_b)
+        self.assertEqual(expected, number)
