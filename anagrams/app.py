@@ -39,32 +39,24 @@ def number_needed(word_a, word_b):
 
     """
 
-    len_word_a = len(word_a)
-    len_word_b = len(word_b)
-
     bucket_a = letter_counter(word_a)
     bucket_b = letter_counter(word_b)
+    delete_values = 0
+    set_a = set(bucket_a)
+    set_b = set(bucket_b)
 
-    if len_word_a == len_word_b:
-        set_a = set(bucket_a)
-        set_b = set(bucket_b)
-        return len(set_a ^ set_b)
-    else:
-        delete_values = 0
-        set_a = set(bucket_a)
-        set_b = set(bucket_b)
+    for letter in (set_b ^ set_a):
+        if letter in bucket_a.keys():
+            delete_values += bucket_a[letter]
+        elif letter in bucket_b.keys():
+            delete_values += bucket_b[letter]
 
-        for letter in (set_b ^ set_a):
-            if letter in bucket_a.keys():
-                delete_values += bucket_a[letter]
-            elif letter in bucket_b.keys():
-                delete_values += bucket_b[letter]
+    for letter in set_a.intersection(set_b):
+        if bucket_a[letter] > bucket_b[letter]:
+            increment = bucket_a[letter] - bucket_b[letter]
+            delete_values += increment
+        elif bucket_b[letter] > bucket_a[letter]:
+            increment = bucket_b[letter] - bucket_a[letter]
+            delete_values += increment
 
-        for letter in set_a.intersection(set_b):
-            if bucket_a[letter] > bucket_b[letter]:
-                increment = bucket_a[letter] - bucket_b[letter]
-                delete_values += increment
-            elif bucket_b[letter] > bucket_a[letter]:
-                increment = bucket_b[letter] - bucket_a[letter]
-                delete_values += increment
-        return delete_values
+    return delete_values
