@@ -15,11 +15,16 @@ import logging
 logger = logging.getLogger("debug")
 
 
-def letter_filter(pivot):
-    while True:
-        outside_letter = yield
-        if outside_letter not in pivot:
-            yield outside_letter
+def letter_counter(pivot_word):
+    letter_container = dict()
+
+    for letter in pivot_word:
+        if letter not in letter_container.keys():
+            letter_container[letter] = 1
+        else:
+            letter_container[letter] += 1
+
+    return letter_container
 
 
 def number_needed(word_a, word_b):
@@ -34,31 +39,32 @@ def number_needed(word_a, word_b):
 
     """
 
-    word_a_len = len(word_a)
-    word_b_len = len(word_b)
-    bucket = []
+    len_word_a = len(word_a)
+    len_word_b = len(word_b)
 
-    if word_a_len > word_b_len:
-        scanner = letter_filter(word_a)
-        next(scanner)
-        for letter in word_b:
-            popped = scanner.send(letter)
-            if popped is not None:
-                bucket.append(popped)
+    bucket_a = letter_counter(word_a)
+    bucket_b = letter_counter(word_b)
 
-        new_a = [letter for letter in word_a if letter not in bucket]
-        return len(new_a)
-    elif word_b_len > word_a_len:
-        scanner = letter_filter(word_b)
-        next(scanner)
-        for letter in word_a:
-            popped = scanner.send(letter)
-            if popped is not None:
-                bucket.append(popped)
+    if len_word_a == len_word_b:
+        set_a = set(bucket_a)
+        set_b = set(bucket_b)
+        return len(set_a ^ set_b)
+    else:
+        delete_values = 0
+        set_a = set(bucket_a)
+        set_b = set(bucket_b)
 
-        new_b = [letter for letter in word_b if letter not in bucket]
-        return len(new_b)
-    elif word_b_len == word_a_len:
-        bucket_a = [letter for letter in word_a if letter not in word_b]
-        bucket_b = [letter for letter in word_b if letter not in word_a]
-        return len(bucket_a + bucket_b)
+        for letter in (set_b ^ set_a):
+            if letter in bucket_a.keys():
+                delete_values += bucket_a[letter]
+            elif letter in bucket_b.keys():
+                delete_values += bucket_b[letter]
+
+        for letter in set_a.intersection(set_b):
+            if bucket_a[letter] > bucket_b[letter]:
+                increment = bucket_a[letter] - bucket_b[letter]
+                delete_values += increment
+            elif bucket_b[letter] > bucket_a[letter]:
+                increment = bucket_b[letter] - bucket_a[letter]
+                delete_values += increment
+        return delete_values

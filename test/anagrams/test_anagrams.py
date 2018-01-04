@@ -9,7 +9,8 @@
 .. moduleauthor:: Jorge Omar Vazquez <jorgeomar.vazquez@gmail.com>
 ..:date: Dec 28, 2017
 """
-
+import json
+import os
 import unittest
 
 from anagrams.app import number_needed
@@ -35,5 +36,35 @@ class TestAnagram(unittest.TestCase):
         word_a = 'bugexikjevtubidpulaelsbcqlupwetzyzdvjphn'
         word_b = 'lajoipfecfinxjspxmevqxuqyalhrsxcvgsdxxkacspbchrbvvwnvsdtsrdk'
         expected = 40
+        number = number_needed(word_a, word_b)
+        self.assertEqual(expected, number)
+
+    def test_number_needed_case_five(self):
+        cases_file = os.path.abspath(
+            os.path.join(os.path.dirname(__file__),
+                         'cases.json')
+            )
+
+        with open(cases_file, 'r') as test_case:
+            payload = json.loads(test_case.read())
+
+        word_a = payload['5']['a']
+        word_b = payload['5']['b']
+        expected = 1000
+        number = number_needed(word_a, word_b)
+        self.assertEqual(expected, number)
+
+    def test_number_needed_case_six(self):
+        cases_file = os.path.abspath(
+            os.path.join(os.path.dirname(__file__),
+                         'cases.json')
+            )
+
+        with open(cases_file, 'r') as test_case:
+            payload = json.loads(test_case.read())
+
+        word_a = payload['6']['a']
+        word_b = payload['6']['b']
+        expected = 596
         number = number_needed(word_a, word_b)
         self.assertEqual(expected, number)
