@@ -6,15 +6,15 @@
 .. module:: open_file
    :platform: Unix, Windows
    :synopsis: I recall an example where they asked me to open a file,
-   but instead of opening the file and read line by line, they tester
+   but instead of opening the file and read line by line, they
    wanted me to do something different.
 .. moduleauthor:: Jorge Omar Vazquez <jorgeomar.vazquez@gmail.com>
 ..:date: Dec 30, 2017
 """
-
-import os
+import json
 import logging
-from collections import deque
+import os
+
 import logconfig
 
 TARGET = os.path.abspath(os.path.join(os.path.dirname(__file__),
@@ -26,8 +26,20 @@ logconfig.from_json(_LOG)
 logger = logging.getLogger('debug')
 
 
+def get_json(filename):
+    """
+    Return json data from a file
+    :param filename:str path
+    :return: dict
+    """
+    with obtain_stream(filename) as stream:
+        data = json.loads(stream.read())
+    return data
+
+
 def obtain_stream(target):
     return open(target, 'r')
+
 
 def read_file(stream):
     while True:
@@ -37,8 +49,10 @@ def read_file(stream):
         # logger.debug("Doing yield")
         yield data
 
+
 def word_handler(word):
     return 'e' in word
+
 
 try:
     with obtain_stream(TARGET) as content:
