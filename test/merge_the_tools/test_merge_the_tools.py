@@ -14,6 +14,16 @@ class TestMergeTheTools(unittest.TestCase):
         self.assertEqual(output, expected, f"Got {output}")
         # change this to something different, with generators perhaps
 
+    def test_groupper(self):
+        target = "AABCAAADA"
+        sub_segments = 3
+        expected = ["AB", "CA", "AD"]
+        results = list()
+        for sequence in groupper(target, sub_segments):
+            results.append(sequence)
+
+        for i in range(sub_segments):
+            self.assertEqual(results[i], expected[i])
 
 if __name__ == '__main__':
     unittest.main()
