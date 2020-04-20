@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-:mod:`open_file` -- Open a file with generators 
+:mod:`open_file` -- Open a file with generators
 ===================================
 
 .. module:: open_file
@@ -46,7 +46,6 @@ def read_file(stream):
         data = stream.readline()
         if not data:
             break
-        # logger.debug("Doing yield")
         yield data
 
 

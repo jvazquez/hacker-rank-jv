@@ -51,7 +51,7 @@ class Node:
         balanced_left = self.left.is_balanced() if self.left else False
         balanced_right = self.right.is_balanced() if self.right else False
 
-        if(abs(height_left - height_right) <=1
+        if(abs(height_left - height_right) <= 1
            and balanced_left and balanced_right):
             return True
         return False
@@ -119,7 +119,8 @@ class Node:
 
 
 def is_bst(node):
-    return _is_bst_scan(node, MINIMUM, MAXIMUM) 
+    return _is_bst_scan(node, MINIMUM, MAXIMUM)
+
 
 def _is_bst_scan(node, minimum, maximum):
     if node is None:
