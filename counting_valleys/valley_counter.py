@@ -29,9 +29,11 @@ class ValleyCount:
 
 
 def counting_valleys(steps, sequence):
-    valley_counter = ValleyCount(steps)
-
+    sea_level_index = 0
+    valley_count = 0
+    map_key = {"U": 1, "D": -1}
     for step in sequence:
-        valley_counter.step_analyzer(step)
-
-    return len(valley_counter.valley_counter)
+        sea_level_index += map_key.get(step)
+        if sea_level_index == 0 and step == "U":
+            valley_count += 1
+    return valley_count

@@ -6,6 +6,10 @@ class TestCountingValleys(unittest.TestCase):
     def test_valley_count_case_zero(self):
         steps = 8
         pattern = "UDDDUDUU"
+        """"
+        UDDDUDUU
+        10-1-2-1-2-10
+        """
         expected = 1
         self.assertEqual(expected, counting_valleys(steps, pattern))
 
