@@ -1,25 +1,27 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"strings"
+	"unicode/utf8"
+)
 
-type UserInput struct {
-	Word string
+func reverser(toReverse string) string {
+	reversed := make([]string, utf8.RuneCountInString(toReverse))
+	i := len(toReverse)
+
+	for _, c := range toReverse {
+		i--
+		reversed[i] = string(c)
+	}
+
+	log.Printf("%s reversed is %s", toReverse, reversed)
+
+	return strings.Join(reversed, "")
 }
 
-func(u *UserInput) reverser() string {
-	wordlen := len(u.Word)
-	var reversed [wordlen]str
-
-	for i := wordlen; i >= 0; i-- {
-		reversed[i] = u.Word[i]
-	}
-}
-
-func main(){
-	userData := UserInput{Word: "Banana"}
-	wordlen := len(userData.Word) - 1
-
-	for i := wordlen; i >= 0; i-- {
-		fmt.Printf("%c", userData.Word[i])
-	}
+func main() {
+	var word = "Banana"
+	fmt.Printf("%s reversed is %s\n", word, reverser(word))
 }
