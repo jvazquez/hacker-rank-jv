@@ -6,7 +6,7 @@
 .. module:: app
    :platform: Unix, Windows
    :synopsis: Determines the amount of letters needed to be
-removed from two strings so they becom anagrams
+removed from two strings so they become anagrams
 .. moduleauthor:: Jorge Omar Vazquez <jorgeomar.vazquez@gmail.com>
 ..:date: Dec 28, 2017
 """
