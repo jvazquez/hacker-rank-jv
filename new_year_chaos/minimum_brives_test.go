@@ -7,28 +7,26 @@ import (
 
 func TestMinimumBribes(t *testing.T) {
 	var caseOne = []int32{2, 1, 5, 3, 4}
-	minimum, chaos := MinimumBribes(caseOne)
+	var lineScanner LineScanner
+	minimum := lineScanner.MinimumBribes(caseOne)
 
-	if chaos != "" {
+	if minimum == ErrorValue {
 		t.Error(
-			fmt.Sprintf(
-				"This case should haven't failed.\nGot %d and %s\n",
-				minimum,
-				chaos,
-			),
+			"This case should haven't failed.",
 		)
 	}
 
 	if minimum != 3 {
-		t.Error("This case expects that the brives are 3")
+		t.Error(fmt.Sprintf("This case expects that the bribes are 3, got %d", minimum))
 	}
 }
 
 func TestMinimumBribesTwo(t *testing.T) {
 	caseTwo := [5]int32{2, 5, 1, 3, 4}
-	shifts, chaos := MinimumBribes(caseTwo[:])
+	var lineScanner LineScanner
+	shifts := lineScanner.MinimumBribes(caseTwo[:])
 
-	if chaos != ErrorMessage {
+	if shifts != ErrorValue {
 		t.Error(
 			fmt.Sprintf(
 				"This case should have failed.\nGot %d\n",
@@ -39,27 +37,27 @@ func TestMinimumBribesTwo(t *testing.T) {
 }
 
 func TestMinimumBribesTcOne(t *testing.T) {
+	var lineScanner LineScanner
+	var shifts int32
 	sample := []int32{5, 1, 2, 3, 7, 8, 6, 4}
-	_, chaos := MinimumBribes(sample[:])
-	if chaos != ErrorMessage {
+	shifts = lineScanner.MinimumBribes(sample[:])
+	if shifts != ErrorValue {
 		t.Error("This case should have failed")
 	}
 
 	sampleTwo := []int32{1, 2, 5, 3, 7, 8, 6, 4}
-	shifts, _ := MinimumBribes(sampleTwo[:])
+	shifts = lineScanner.MinimumBribes(sampleTwo[:])
 	if shifts != 7 {
-		t.Error("I expected 7 shifts")
+		t.Error(fmt.Sprintf("I expected 7 shifts, got %d", shifts))
 	}
 }
 
-func TestMinimumBribesTcSeven(t *testing.T) {
+func TestMinimumBribesTcSix(t *testing.T) {
 	var lineScanner LineScanner
 	lineScanner.ReadFixture("fixtures/tc6.txt")
-	shifts, chaos := MinimumBribes(lineScanner.TestCases[0])
-	if chaos != "" {
-		t.Error("There should be no error on this case")
-	}
+	shifts := lineScanner.MinimumBribes(lineScanner.TestCases[0])
+
 	if shifts != 96110 {
-		t.Error("I expected 96110")
+		t.Error(fmt.Sprintf("I expected 96110.Got %d\n", shifts))
 	}
 }
