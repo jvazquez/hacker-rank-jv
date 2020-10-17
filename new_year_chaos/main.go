@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -55,55 +56,55 @@ func (lp LineScanner) Max(maxValue int32, minValue int32) int32 {
 	}
 }
 
-func (lp *LineScanner) MinimumBribes(consumerLine []int32) int32 {
+func (lp *LineScanner) MinimumBribes(consumerLine []int32, verbose bool) int32 {
 	var positionShifts, currentFixedPosition int32
-	log.Println(consumerLine)
-	for currentPosition, currentPerson := range consumerLine {
-		//currentFixedPosition = int32(currentPosition) + 1
-		currentFixedPosition = int32(currentPosition)
+	logMessage(fmt.Sprintf("%d", consumerLine), verbose)
 
-		if (currentPerson-currentFixedPosition)-1 > MaxShifts {
+	for currentPosition, currentPerson := range consumerLine {
+		currentFixedPosition = int32(currentPosition) + 1
+		if (currentPerson - currentFixedPosition) > MaxShifts {
 			return ErrorValue
 		}
 
-		/*
-			Avoid the full count from currentFixedPosition to 0.
-			I just need to count from currentFixedPosition, one head
-		*/
-		twoPositionsBefore := lp.Max(currentFixedPosition+2, 0)
-		myPositions := consumerLine[currentFixedPosition:twoPositionsBefore]
-		log.Print(myPositions)
-		/*
-			for j:= 2 ; j > 0; j-- {
-				if consumerLine[currentFixedPosition + int32(j)] < currentPerson {
-					positionShifts += 1
-				}
-			}
-		*/
-		/*
-			for _, personBefore := range myPositions {
-				if againstVersion(currentPerson, personBefore) {
-					positionShifts += 1
-				}
-			}
-		*/
+		//logMessage(fmt.Sprintf("%d - %d = %d", currentFixedPosition, currentPerson, manualDelta), verbose)
+		manualDelta := currentFixedPosition - currentPerson
+		switch {
+		case manualDelta > 1:
+			positionShifts += manualDelta
+		//case manualDelta < 1:
+		//	logMessage(fmt.Sprintf("+ %d", manualDelta * -1), verbose)
+		//	positionShifts += manualDelta * -1
+		default:
+			deltaIndex := lp.Max(currentFixedPosition-3, 0)
+			lineAhead := consumerLine[deltaIndex : currentFixedPosition-1]
+			logMessage(fmt.Sprintf("[%d:%d] ==> %d <== Pivot %d",
+				deltaIndex, currentFixedPosition-1, lineAhead, currentPerson),
+				verbose)
+			sliceAhead(lineAhead, currentPerson, &positionShifts, verbose)
+		}
+
+		logMessage(fmt.Sprintf("positionShift: %d", positionShifts), verbose)
 	}
 
 	return positionShifts
 }
 
-func againstVersion(person int32, previousPerson int32) bool {
-	log.Printf("%d > %d = %t", previousPerson, person, previousPerson > person)
-	return previousPerson > person
+func logMessage(message string, show bool) {
+	if show {
+		log.Println(message)
+	}
 }
 
-func firstWorkingCheck(person int32, position int32) bool {
-	return position > person
-}
-
-func personIsAheadOfCurrentPosition(person int32, position int32) bool {
-	log.Printf("%d - %d %d", person, position, person-position)
-	return (person - position) > 2
+func sliceAhead(lineAhead []int32, currentPerson int32, positionShifts *int32, verbose bool) {
+	for _, personAhead := range lineAhead {
+		if personAhead > currentPerson {
+			logMessage(fmt.Sprintf("%d > %d = %t", personAhead,
+				currentPerson, personAhead > currentPerson),
+				verbose,
+			)
+			*positionShifts += 1
+		}
+	}
 }
 
 func main() {
