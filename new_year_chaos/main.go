@@ -48,60 +48,74 @@ func (lp *LineScanner) ReadFixture(testCasePath string) {
 	}
 }
 
-func (lp LineScanner) Max(maxValue int32, minValue int32) int32 {
-	if maxValue < minValue {
-		return minValue
+func max(valueA int32, valueB int32) int32 {
+	if valueA < valueB {
+		return valueB
 	} else {
-		return maxValue
+		return valueA
 	}
 }
 
-func (lp *LineScanner) MinimumBribes(consumerLine []int32, verbose bool) int32 {
+func (lp *LineScanner) MinimumBribes(consumerLine []int32) int32 {
 	var positionShifts, currentFixedPosition int32
-	logMessage(fmt.Sprintf("%d", consumerLine), verbose)
 
 	for currentPosition, currentPerson := range consumerLine {
 		currentFixedPosition = int32(currentPosition) + 1
-		if (currentPerson - currentFixedPosition) > MaxShifts {
+		manualDelta := currentFixedPosition - currentPerson
+		if manualDelta > MaxShifts {
 			return ErrorValue
 		}
 
-		//logMessage(fmt.Sprintf("%d - %d = %d", currentFixedPosition, currentPerson, manualDelta), verbose)
-		manualDelta := currentFixedPosition - currentPerson
 		switch {
 		case manualDelta > 1:
 			positionShifts += manualDelta
-		//case manualDelta < 1:
-		//	logMessage(fmt.Sprintf("+ %d", manualDelta * -1), verbose)
-		//	positionShifts += manualDelta * -1
 		default:
-			deltaIndex := lp.Max(currentFixedPosition-3, 0)
+			deltaIndex := max(currentFixedPosition-3, 0)
 			lineAhead := consumerLine[deltaIndex : currentFixedPosition-1]
-			logMessage(fmt.Sprintf("[%d:%d] ==> %d <== Pivot %d",
-				deltaIndex, currentFixedPosition-1, lineAhead, currentPerson),
-				verbose)
-			sliceAhead(lineAhead, currentPerson, &positionShifts, verbose)
+			viewTwoPositionsAhead(lineAhead, currentPerson, &positionShifts)
 		}
-
-		logMessage(fmt.Sprintf("positionShift: %d", positionShifts), verbose)
 	}
 
 	return positionShifts
 }
 
-func logMessage(message string, show bool) {
-	if show {
-		log.Println(message)
+func minimumBribes(consumerLine []int32) int32 {
+	var positionShifts, currentFixedPosition int32
+	fmt.Println(consumerLine)
+	for currentPosition, currentPerson := range consumerLine {
+		currentFixedPosition = int32(currentPosition) + 1
+		positionDifference := currentPerson - currentFixedPosition
+
+		if positionDifference > MaxShifts {
+			return ErrorValue
+		}
+		twoPositionsAheadFromHere := max(int32(currentPosition-2), 0)
+		lineAhead := consumerLine[twoPositionsAheadFromHere:currentPosition]
+		for _, personAhead := range lineAhead {
+			if currentPerson < personAhead {
+				positionShifts = positionShifts + 1
+				log.Printf("%d < %d => +%d\n", currentPerson, personAhead, positionShifts)
+			}
+		}
+		/*else  if positionDifference > 0 {
+			positionShifts += positionDifference
+		} else if positionDifference < 0 {
+			twoPositionsAheadFromHere := max(int32(currentPosition - 2), 0)
+			lineAhead := consumerLine[twoPositionsAheadFromHere : currentPosition]
+			for _, personAhead := range lineAhead {
+				if personAhead > currentPerson {
+					positionShifts = positionShifts + 1
+				}
+			}
+		}
+		*/
 	}
+	return positionShifts
 }
 
-func sliceAhead(lineAhead []int32, currentPerson int32, positionShifts *int32, verbose bool) {
+func viewTwoPositionsAhead(lineAhead []int32, currentPerson int32, positionShifts *int32) {
 	for _, personAhead := range lineAhead {
 		if personAhead > currentPerson {
-			logMessage(fmt.Sprintf("%d > %d = %t", personAhead,
-				currentPerson, personAhead > currentPerson),
-				verbose,
-			)
 			*positionShifts += 1
 		}
 	}
