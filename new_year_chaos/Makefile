@@ -4,11 +4,12 @@ BUILD_ARG_BASE = $(if $(filter $(NOCACHEBASE), 1),--no-cache)
 USERID?=$(shell id -u)
 GROUPID?=$(shell id -g)
 
-.PHONY: all test_image
+.PHONY: all profile_image
 
-test_image:
+profile_image:
 	$(DOCKER) build $(BUILD_ARG) -t new-year-chaos:latest .
-run_profile:
+run_profile_test:
 	$(DOCKER) run \
     	--rm \
+    	--memory="1g" \
     	new-year-chaos:latest

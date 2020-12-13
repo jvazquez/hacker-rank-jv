@@ -7,7 +7,7 @@ import (
 
 func TestMinimumBribes(t *testing.T) {
 	var caseOne = []int32{2, 1, 5, 3, 4}
-	minimum := minimumBribes(caseOne)
+	minimum := minimumBribesBubbleSort(caseOne)
 
 	if minimum == ErrorValue {
 		t.Error(
@@ -22,13 +22,13 @@ func TestMinimumBribes(t *testing.T) {
 
 func TestMinimumBribesTcZero(t *testing.T) {
 	sample := []int32{2, 1, 5, 3, 4}
-	shifts := minimumBribes(sample[:])
+	shifts := minimumBribesBubbleSort(sample[:])
 	if shifts != 3 {
 		t.Error("This case should have three positions")
 	}
 
 	sample = []int32{2, 5, 1, 3, 4}
-	shifts = minimumBribes(sample)
+	shifts = minimumBribesBubbleSort(sample)
 
 	if shifts != ErrorValue {
 		t.Error("This case should be too chaotic")

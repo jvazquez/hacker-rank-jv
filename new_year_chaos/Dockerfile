@@ -1,3 +1,4 @@
 FROM golang:1.13
 COPY . /app
-CMD ["go", "test", "-bench=."]
+WORKDIR /app
+CMD ["go", "test", "-bench=benchmark_minimum_test.go"]

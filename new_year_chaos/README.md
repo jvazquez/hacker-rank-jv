@@ -10,5 +10,7 @@ Your code did not execute within the time limits. Please optimize your code. For
 ```
 
 So that is why we've got a Dockerfile.
-Build with the provided makefile and run with the
-profile command
+To simulate hackerrank environment, build with makefile
+
+`make profile_image` to build the image
+`make run_profile_test` to run the profile of the test cases
