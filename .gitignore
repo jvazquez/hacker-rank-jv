@@ -101,3 +101,4 @@ ENV/
 .mypy_cache/
 coverage_html_report
 *.log
+/new_year_chaos/.~lock.explanation.ods#

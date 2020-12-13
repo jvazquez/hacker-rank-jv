@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -12,6 +11,7 @@ import (
 
 const MaxShifts = 2
 const ErrorValue = -1
+const MinValue = 0
 
 type LineScanner struct {
 	TestCases    map[int][]int32
@@ -79,9 +79,36 @@ func (lp *LineScanner) MinimumBribes(consumerLine []int32) int32 {
 	return positionShifts
 }
 
+func minimumBribesBubbleSort(consumerLine []int32) int32 {
+	var positionShifts int32
+
+	for currentPosition, currentPerson := range consumerLine {
+		currentFixedPosition := int32(currentPosition) + 1
+		positionDifference := currentPerson - currentFixedPosition
+
+		if positionDifference > MaxShifts {
+			return ErrorValue
+		}
+	}
+
+	for i := len(consumerLine); i > 0; i-- {
+		for j := 1; j < i; j++ {
+			if consumerLine[j-1] > consumerLine[j] {
+				intermediate := consumerLine[j]
+				consumerLine[j] = consumerLine[j-1]
+				consumerLine[j-1] = intermediate
+				positionShifts += 1
+			}
+		}
+	}
+
+	return positionShifts
+}
+
 func minimumBribes(consumerLine []int32) int32 {
-	var positionShifts, currentFixedPosition int32
-	fmt.Println(consumerLine)
+	var positionShifts, currentFixedPosition, bufferCount int32
+	log.Println(consumerLine)
+
 	for currentPosition, currentPerson := range consumerLine {
 		currentFixedPosition = int32(currentPosition) + 1
 		positionDifference := currentPerson - currentFixedPosition
@@ -89,27 +116,21 @@ func minimumBribes(consumerLine []int32) int32 {
 		if positionDifference > MaxShifts {
 			return ErrorValue
 		}
-		twoPositionsAheadFromHere := max(int32(currentPosition-2), 0)
-		lineAhead := consumerLine[twoPositionsAheadFromHere:currentPosition]
-		for _, personAhead := range lineAhead {
-			if currentPerson < personAhead {
-				positionShifts = positionShifts + 1
-				log.Printf("%d < %d => +%d\n", currentPerson, personAhead, positionShifts)
-			}
+
+		onePositionAhead := max(int32(currentPosition-1), MinValue)
+		personAhead := consumerLine[onePositionAhead]
+
+		if personAhead > currentPerson {
+			bufferCount += personAhead - currentPerson
+			positionShifts += 1
+			log.Printf("%d brived %d => Swaps(%d)|| %d - %d => Swaps(%d)", personAhead, currentPerson,
+				positionShifts,
+				personAhead, currentPerson, bufferCount)
+		} else {
+			positionShifts += currentPerson - currentFixedPosition
 		}
-		/*else  if positionDifference > 0 {
-			positionShifts += positionDifference
-		} else if positionDifference < 0 {
-			twoPositionsAheadFromHere := max(int32(currentPosition - 2), 0)
-			lineAhead := consumerLine[twoPositionsAheadFromHere : currentPosition]
-			for _, personAhead := range lineAhead {
-				if personAhead > currentPerson {
-					positionShifts = positionShifts + 1
-				}
-			}
-		}
-		*/
 	}
+
 	return positionShifts
 }
 

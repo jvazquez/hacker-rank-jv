@@ -36,16 +36,16 @@ func TestMinimumBribesTcZero(t *testing.T) {
 }
 
 func TestMinimumBribesTcOne(t *testing.T) {
-	//var shifts int32
-	//sample := []int32{5, 1, 2, 3, 7, 8, 6, 4}
-	//shifts = minimumBribes(sample[:])
-	//if shifts != ErrorValue {
-	//	t.Error("This case should have failed")
-	//}
+	var shifts int32
+	sample := []int32{5, 1, 2, 3, 7, 8, 6, 4}
+	shifts = minimumBribesBubbleSort(sample[:])
+	if shifts != ErrorValue {
+		t.Error("This case should have failed")
+	}
 
 	sampleTwo := []int32{1, 2, 5, 3, 7, 8, 6, 4}
 	//					 1, 2, 3, 4, 5, 6, 7, 8
-	shifts := minimumBribes(sampleTwo[:])
+	shifts = minimumBribesBubbleSort(sampleTwo[:])
 	if shifts != 7 {
 		t.Error(fmt.Sprintf("I expected 7 shifts, got %d", shifts))
 	}
@@ -53,7 +53,7 @@ func TestMinimumBribesTcOne(t *testing.T) {
 
 func TestMinimumBribesTwo(t *testing.T) {
 	caseTwo := [5]int32{2, 5, 1, 3, 4}
-	shifts := minimumBribes(caseTwo[:])
+	shifts := minimumBribesBubbleSort(caseTwo[:])
 
 	if shifts != ErrorValue {
 		t.Error(
@@ -68,7 +68,7 @@ func TestMinimumBribesTwo(t *testing.T) {
 func TestMinimumBribesTcSix(t *testing.T) {
 	var lineScanner LineScanner
 	lineScanner.ReadFixture("fixtures/tc6.txt")
-	shifts := minimumBribes(lineScanner.TestCases[0])
+	shifts := minimumBribesBubbleSort(lineScanner.TestCases[0])
 
 	if shifts != 96110 {
 		t.Error(fmt.Sprintf("I expected 96110.Got %d\n", shifts))
@@ -78,7 +78,7 @@ func TestMinimumBribesTcSix(t *testing.T) {
 func TestMinimumBribesTcTwo(t *testing.T) {
 	var lineScanner LineScanner
 	lineScanner.ReadFixture("fixtures/tc2.txt")
-	shifts := minimumBribes(lineScanner.TestCases[0])
+	shifts := minimumBribesBubbleSort(lineScanner.TestCases[0])
 	if shifts != 966 {
 		t.Error(fmt.Sprintf("I expected 966.Got %d\n", shifts))
 	}
