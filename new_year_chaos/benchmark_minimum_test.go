@@ -12,3 +12,11 @@ func BenchmarkMinimumBribes(b *testing.B) {
 	}
 
 }
+
+func BenchmarkBubbleSortNewImplementation(b *testing.B){
+	var lineScanner LineScanner
+	lineScanner.ReadFixture("fixtures/tc6.txt")
+	for i := 0; i < b.N; i++ {
+		_ = minimumBribesImproved(lineScanner.TestCases[0])
+	}
+}

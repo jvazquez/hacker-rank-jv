@@ -105,6 +105,46 @@ func minimumBribesBubbleSort(consumerLine []int32) int32 {
 	return positionShifts
 }
 
+func minimumBribesImproved(consumerLine []int32) int32 {
+	var positionShifts int32
+
+	for currentPosition, currentPerson := range consumerLine {
+		currentFixedPosition := int32(currentPosition) + 1
+		positionDifference := currentPerson - currentFixedPosition
+
+		if positionDifference > MaxShifts {
+			return ErrorValue
+		}
+	}
+
+	n := len(consumerLine)
+	swapped := true
+	// loop
+	for swapped {
+		// set swapped to false
+		swapped = false
+		// iterate through all of the elements in our list
+		for i := 1; i < n; i++ {
+			// if the current element is greater than the next
+			// element, swap them
+			if consumerLine[i-1] > consumerLine[i] {
+				// log that we are swapping values for posterity
+				// fmt.Println("Swapping")
+				positionShifts += 1
+				// swap values using Go's tuple assignment
+				consumerLine[i], consumerLine[i-1] = consumerLine[i-1], consumerLine[i]
+				// set swapped to true - this is important
+				// if the loop ends and swapped is still equal
+				// to false, our algorithm will assume the list is
+				// fully sorted.
+				swapped = true
+
+			}
+		}
+	}
+	return positionShifts
+}
+
 func minimumBribes(consumerLine []int32) int32 {
 	var positionShifts, currentFixedPosition, bufferCount int32
 	log.Println(consumerLine)
