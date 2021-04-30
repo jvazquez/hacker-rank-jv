@@ -9,13 +9,11 @@ import (
 )
 
 // HackerRankArrayReader used to read the test cases from hacker rank
-func HackerRankArrayReader() []int32 {
-	reader := bufio.NewReaderSize(os.Stdin, 1024*1024)
-
-	stdout, err := os.Create(os.Getenv("OUTPUT_PATH"))
-	checkError(err)
-
-	defer stdout.Close()
+func HackerRankArrayReader(targetFile string) []int32 {
+	fixture, error := os.Open(targetFile)
+	defer fixture.Close()
+	checkError(error)
+	reader := bufio.NewReaderSize(fixture, 1024*1024)
 
 	nTemp, err := strconv.ParseInt(readLine(reader), 10, 64)
 	checkError(err)

@@ -1,3 +1,3 @@
-module github.com/hacker-rank-jv/utils
+module github.com/jvazquez/hacker-rank-jv/utils
 
 go 1.15
