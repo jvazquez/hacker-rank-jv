@@ -1,10 +1,14 @@
 package main
 
-import "github.com/jvazquez/hacker-rank-jv/utils/pkg"
+import (
+	"github.com/jvazquez/hacker-rank-jv/utils/pkg"
+	"log"
+)
 
 func main() {
-	//lineScanner.ReadFixture("fixtures/tc6.txt")
-	pkg.HackerRankArrayReader("fixtures/tc6.txt")
+	var testCase []int32
+	testCase = pkg.HackerRankArrayReader("fixtures/input1.txt")
+	log.Printf("%v", testCase)
 }
 
 // minimumSwaps finds the minimum number of swaps required to sort the
